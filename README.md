@@ -6,9 +6,9 @@ A model that is helpful in reducing machine cost.
 
 ## Screenshots
 
-| Detect | Assess | Optimise | Recommend | Plant Saathi |
+| Home | Impact | Options | Plan | Learn |
 | --- | --- | --- | --- | --- |
-| ![Detect](docs/screenshots/phone-1-detect.png) | ![Assess](docs/screenshots/phone-2-assess.png) | ![Optimise](docs/screenshots/phone-3-optimise.png) | ![Recommend](docs/screenshots/phone-4-recommend.png) | ![Plant Saathi](docs/screenshots/phone-6-saathi.png) |
+| ![Home](docs/screenshots/1-home.png) | ![Impact assessment](docs/screenshots/2-impact.png) | ![Response options](docs/screenshots/3-options.png) | ![Recommended plan](docs/screenshots/4-plan.png) | ![Outcome and learning](docs/screenshots/5-learn.png) |
 
 ## Install on a phone
 
@@ -30,7 +30,10 @@ The web app works offline once it has been opened.
 
 | Path | What it is |
 | --- | --- |
-| `app/www/` | The app itself: `index.html`, manifest, service worker, icons |
+| `app/www/index.html` | The phone app: Home, Impact, Options, Plan, Learn, More |
+| `app/www/classic.html` | Full analysis view, with Plant Saathi and Live machine (opened from More) |
+| `app/www/engine.js` | Simulated plant data and the decision engine used by the phone app |
+| `app/www/` (other) | Manifest, service worker, icons |
 | `app/android/` | Capacitor Android project that wraps `app/www` |
 | `app/assets/` | Source images for the Android icon and splash screen |
 | `.github/workflows/` | Builds the APK and publishes the web app |
