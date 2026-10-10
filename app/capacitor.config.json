@@ -1,0 +1,9 @@
+{
+  "appId": "com.shadowfox.plantops",
+  "appName": "Plant Ops Optimiser",
+  "webDir": "www",
+  "backgroundColor": "#f3f6fb",
+  "android": {
+    "allowMixedContent": false
+  }
+}

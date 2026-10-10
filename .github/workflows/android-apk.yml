@@ -1,0 +1,64 @@
+name: Android APK
+
+on:
+  push:
+    branches: [main, 'claude/**']
+    paths: ['app/**', '.github/workflows/android-apk.yml']
+  pull_request:
+    paths: ['app/**', '.github/workflows/android-apk.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Copy the web app into the Android project
+        run: npx cap sync android
+
+      - name: Build debug APK
+        working-directory: app/android
+        run: ./gradlew assembleDebug --no-daemon
+
+      - name: Name the APK
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk plant-ops-optimiser.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: plant-ops-optimiser-apk
+          path: app/plant-ops-optimiser.apk
+
+      # On main, also publish the APK as a release so it can be downloaded straight to a phone
+      - name: Publish release
+        if: github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: apk-latest
+          name: Plant Ops Optimiser (latest APK)
+          body: Install on Android by downloading plant-ops-optimiser.apk on the phone and allowing installs from your browser.
+          files: app/plant-ops-optimiser.apk
+          make_latest: true

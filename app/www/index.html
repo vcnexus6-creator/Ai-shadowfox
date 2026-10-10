@@ -1,6 +1,14 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>AI Plant Operations Optimiser</title>
 <meta name="theme-color" content="#0c2f6b">
+<meta name="description" content="Spots machines drifting toward failure and recommends the cheapest response that keeps customer orders on time.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Plant Ops">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Devanagari:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap">
@@ -2105,8 +2113,25 @@ function pickSearch(i) {
 }
 
 let dlP = null;
+// Outside Claude (installed app or plain browser): share the file on phones that support it, else download it
+function browserDownloads() {
+  return {
+    async save({ filename, data }) {
+      const type = filename.endsWith('.csv') ? 'text/csv' : 'text/plain';
+      const file = typeof File === 'function' ? new File([data], filename, { type }) : null;
+      if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try { await navigator.share({ files: [file], title: filename }); return; }
+        catch (e) { if (e && e.name === 'AbortError') throw Object.assign(new Error('declined'), { code: 'declined' }); }
+      }
+      const url = URL.createObjectURL(new Blob([data], { type }));
+      const a = Object.assign(document.createElement('a'), { href: url, download: filename });
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+    },
+  };
+}
 function getDownloads() {
-  if (!dlP) dlP = (window.claude && typeof window.claude.use === 'function') ? window.claude.use('downloads').catch(() => null) : Promise.resolve(null);
+  if (!dlP) dlP = (window.claude && typeof window.claude.use === 'function') ? window.claude.use('downloads').catch(() => null) : Promise.resolve(browserDownloads());
   return dlP;
 }
 const csvCell = v => { const s = v == null ? '' : String(v); return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
@@ -2725,6 +2750,10 @@ async function saveCollector(btn) {
 try { const h = (location.hash || '').slice(1), map = { detect: 1, assess: 2, optimise: 3, recommend: 4, learn: 5, ai: 6, live: 7 }; if (map[h]) state.step = map[h]; } catch (e) { /* no hash */ }
 render();
 getDownloads().then(dl => { if (dl) $('#exportbtn').hidden = false; });
+
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost') && !window.Capacitor) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
 </script>
 
 </body></html>
