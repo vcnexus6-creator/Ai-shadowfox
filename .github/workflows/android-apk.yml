@@ -2,7 +2,7 @@ name: Android APK
 
 on:
   push:
-    branches: [main, 'claude/**']
+    branches: [main]
     paths: ['app/**', '.github/workflows/android-apk.yml']
   pull_request:
     paths: ['app/**', '.github/workflows/android-apk.yml']
@@ -18,22 +18,21 @@ jobs:
       run:
         working-directory: app
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: app/package-lock.json
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 21
           cache: gradle
 
-      - uses: android-actions/setup-android@v3
-
+      # ubuntu-latest ships the Android SDK (ANDROID_HOME); Gradle fetches any missing platform itself
       - name: Install dependencies
         run: npm ci
 
