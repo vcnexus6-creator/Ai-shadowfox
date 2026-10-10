@@ -1,0 +1,21 @@
+{
+  "name": "plant-ops-optimiser",
+  "version": "1.0.0",
+  "description": "AI Plant Operations Optimiser as an installable phone app",
+  "scripts": {
+    "serve": "npx --yes http-server www -p 8080 -c-1",
+    "android:add": "cap add android",
+    "android:icons": "capacitor-assets generate --android --iconBackgroundColor '#0c2f6b' --splashBackgroundColor '#f3f6fb' --splashBackgroundColorDark '#0c2f6b'",
+    "android:sync": "cap sync android",
+    "android:open": "cap open android"
+  },
+  "private": true,
+  "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/core": "^8.5.3"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^8.5.3"
+  }
+}
