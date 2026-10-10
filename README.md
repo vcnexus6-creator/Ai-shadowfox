@@ -4,6 +4,12 @@ A model that is helpful in reducing machine cost.
 
 **AI Plant Operations Optimiser** spots machines drifting toward failure and recommends the cheapest response that keeps customer orders on time. It runs as a phone app in two ways: an Android APK, or a web app you add to your home screen.
 
+## Screenshots
+
+| Detect | Assess | Optimise | Recommend | Plant Saathi |
+| --- | --- | --- | --- | --- |
+| ![Detect](docs/screenshots/phone-1-detect.png) | ![Assess](docs/screenshots/phone-2-assess.png) | ![Optimise](docs/screenshots/phone-3-optimise.png) | ![Recommend](docs/screenshots/phone-4-recommend.png) | ![Plant Saathi](docs/screenshots/phone-6-saathi.png) |
+
 ## Install on a phone
 
 ### Android (APK)
