@@ -114,7 +114,7 @@ button.kpi { width: 100%; }
 .tbl .r { text-align: right; font-variant-numeric: tabular-nums; }
 .tbl td.b { white-space: nowrap; }
 .tbl .c { text-align: center; }
-.b { font-weight: 700; }
+.tbl .b { font-weight: 700; }
 .tag { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 11.5px; font-weight: 700; white-space: nowrap; }
 .tag.r { background: var(--red-50); color: var(--red); } .tag.g { background: var(--grn-50); color: var(--grn); } .tag.a { background: var(--amb-50); color: var(--amb); } .tag.b { background: var(--blu-50); color: var(--blu); } .tag.m { background: var(--soft); color: var(--t3); }
 
@@ -224,6 +224,7 @@ tr.best .oid { background: var(--blu); border-color: var(--blu); color: #fff; }
 
 /* charts */
 .chart { display: block; width: 100%; height: auto; }
+.stack { display: grid; gap: 14px; align-content: start; }
 .chart text { font: 10.5px var(--font); fill: var(--t3); }
 
 /* bottom tab bar */
@@ -258,6 +259,52 @@ input[type="range"] { width: 100%; accent-color: var(--blu); height: 28px; }
 .toast { position: fixed; z-index: 100; left: 50%; transform: translateX(-50%); bottom: calc(var(--nav-h) + 18px + env(safe-area-inset-bottom, 0px)); background: var(--t1); color: #fff; padding: 10px 16px; border-radius: 999px; font-size: 13.5px; box-shadow: 0 8px 24px rgba(15, 31, 61, .25); max-width: 90%; text-align: center; }
 .note { font-size: 12px; color: var(--t3); text-align: center; }
 .empty { text-align: center; padding: 26px 18px; display: grid; gap: 12px; justify-items: center; color: var(--t2); }
+/* ===== Website layout for wide screens (laptops, desktops, tablets in landscape) ===== */
+.nav .brand { display: none; }
+@media (min-width: 900px) {
+  html, body { background: var(--bg); }
+  .app { max-width: none; box-shadow: none; display: flex; flex-direction: column; }
+  .nav { order: -1; position: sticky; top: 0; left: auto; transform: none; width: 100%; max-width: none; display: flex; align-items: center; gap: 4px;
+    padding: 10px max(24px, calc((100% - 1160px) / 2)); border-top: 0; border-bottom: 1px solid var(--line); background: rgba(255, 255, 255, .94); }
+  .nav .brand { display: flex; align-items: center; gap: 10px; margin-right: auto; padding: 4px 8px 4px 0; text-align: left; font-size: 15px; font-weight: 750; color: var(--t1); }
+  .nav .brand small { display: block; font-size: 12px; font-weight: 500; color: var(--t3); }
+  .nav .brand .logo { width: 36px; height: 36px; border-radius: 10px; background: var(--blu); color: #fff; display: grid; place-items: center; font-size: 14px; font-weight: 800; }
+  .nav button:not(.brand) { display: flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 10px; font-size: 14px; }
+  .nav button:not(.brand) svg { width: 18px; height: 18px; }
+  .nav button:not(.brand):hover { background: var(--soft); color: var(--t1); }
+  .nav button[aria-current="page"] { background: var(--blu-50); }
+  .nav button[aria-current="page"]::before { display: none; }
+  .nav .dot { top: 5px; left: 24px; }
+
+  .scr { width: 100%; max-width: 1160px; margin: 0 auto; padding: 30px 24px 56px; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start; }
+  .scr > * { grid-column: 1 / -1; }
+  .scr > .half { grid-column: auto; }
+  .stack { gap: 20px; }
+    .top h1 { font-size: 30px; }
+  .top .sub { font-size: 15px; }
+  .kpis { gap: 16px; }
+  .kpi { padding: 18px 12px; }
+  .kpi b { font-size: 30px; }
+  .kpi span { font-size: 13.5px; }
+  .seg { max-width: 560px; }
+  .mlist { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mrow:nth-child(2) { border-top: 0; }
+  .mrow:nth-child(odd) { border-right: 1px solid var(--line); }
+  .mrow:hover, .mi:hover, .opt tbody tr:hover td { background: var(--soft); }
+  .opt tbody tr.best:hover td { background: var(--blu-100); }
+  .card { border-radius: 16px; }
+  .next { justify-self: end; width: auto; min-width: 380px; }
+  .next:hover { background: var(--blu-d); }
+  .btn:hover { filter: brightness(.97); }
+  .btns { align-self: end; }
+  .note { text-align: left; }
+
+  /* pop-ups become centred dialogs */
+  .sheet { top: 50%; bottom: auto; max-width: 560px; max-height: 85vh; border-radius: 18px; padding: 20px 22px 22px; opacity: 0; transform: translate(-50%, -46%); transition: opacity .2s, transform .2s; }
+  .sheet.on { opacity: 1; transform: translate(-50%, -50%); }
+  .grab { display: none; }
+  .toast { bottom: 28px; }
+}
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
@@ -377,15 +424,15 @@ function renderHome() {
     <div class="card"><div class="mlist">${list.map(machineRow).join('')}</div>
       <button class="more-btn" data-act="all-machines">${ui.allMachines ? 'Show fewer' : `View all ${MACHINES.length} machines`}</button></div>`;
   else if (ui.home === 'alerts') body = al.map(m => m.alert ? `
-    <div class="callout r"><span class="ci">${ic('warn', 18, 2.2)}</span><div><h3>${m.id} · spindle bearing wear</h3>
+    <div class="callout r half"><span class="ci">${ic('warn', 18, 2.2)}</span><div><h3>${m.id} · spindle bearing wear</h3>
       <p>Vibration ${SENSOR.last.toFixed(2)} mm/s (+${Math.round(SENSOR.rise * 100)}% on baseline), temperature +${(SENSOR.tNow - SENSOR.t0).toFixed(1)} °C. ${pct(state.params.p5)} chance of failure within 5 days. Two OEM-A orders run on it this week.</p>
       <div style="margin-top:10px"><button class="btn pri" data-act="tab" data-tab="impact">Assess impact ${ic('chev', 16, 2.4)}</button></div></div></div>` : `
-    <div class="callout a"><span class="ci">${ic('warn', 18, 2.2)}</span><div><h3 style="color:var(--amb)">${m.id} · hydraulic oil temperature</h3>
+    <div class="callout a half"><span class="ci">${ic('warn', 18, 2.2)}</span><div><h3 style="color:var(--amb)">${m.id} · hydraulic oil temperature</h3>
       <p>Runs 6 °C above normal at full tonnage; ${m.risk}% failure risk. 40 h of forgings ahead of the knuckle cell cover a 36 h repair, so no schedule change. Check filter and cooler at Sunday maintenance.</p></div></div>`).join('');
   else body = `
-    <div class="card"><div class="card-h"><h2>M-07 spindle vibration</h2><span class="tag r">ALARM</span></div><div class="card-b">${vibChart()}
+    <div class="card half"><div class="card-h"><h2>M-07 spindle vibration</h2><span class="tag r">ALARM</span></div><div class="card-b">${vibChart()}
       <p class="small muted" style="margin-top:6px">Hourly RMS, mm/s, last 14 days. Drift flagged ${leadDays()} days ago.</p></div></div>
-    <div class="card"><div class="card-b" style="padding-top:14px;display:grid;gap:14px">
+    <div class="card half"><div class="card-b" style="padding-top:14px;display:grid;gap:14px">
       ${[['Spindle temperature', SENSOR.tNow.toFixed(1) + ' °C', '+' + (SENSOR.tNow - SENSOR.t0).toFixed(1) + ' °C in ' + ONSET_DAYS + ' days', SENSOR.temp, '#c98a00'],
          ['Motor current', SENSOR.amp[SENSOR.amp.length - 1].v.toFixed(1) + ' A', SENSOR.spikes + ' spikes in 5 days', SENSOR.amp, '#4a5873']].map(([l, v, d, s, c]) =>
         `<div><div class="row"><b style="font-size:14px">${l}</b><b>${v}</b></div><div class="small muted">${d}</div>${spark(s, c, 44)}</div>`).join('')}
@@ -426,9 +473,9 @@ function renderImpact() {
       <div class="kpi r"><b>${risk.length}</b><span>At risk</span></div>
       <div class="kpi g"><b>${ORDERS.length - risk.length}</b><span>On track</span></div>
     </div>
-    <div class="card"><div class="card-h"><h2>Open orders</h2><span class="small muted">Qty in pieces</span></div>
+    <div class="card half"><div class="card-h"><h2>Open orders</h2><span class="small muted">Qty in pieces</span></div>
       <table class="tbl"><thead><tr><th>Order</th><th>Part</th><th class="r">Qty</th><th>Dispatch</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></div>
-    <div class="callout r"><span class="ci">${ic('warn', 18, 2.2)}</span><div><h3>Impact analysis</h3>
+    <div class="callout r half"><span class="ci">${ic('warn', 18, 2.2)}</span><div><h3>Impact analysis</h3>
       <p>Machine M-07 (spindle) makes steering knuckles for <b>${risk.map(o => o.so).join(' and ')}</b>. If nothing changes, there is a <b>${pct(pCut())}</b> chance it fails before the Friday 12:00 dispatch cut-off.</p></div></div>
     <div class="sec">If M-07 breaks down (${FAIL_DOWN} h repair)</div>
     <div class="kpis">
@@ -477,8 +524,8 @@ function renderOptions() {
     ${header('Response Options', `AI-scored feasible options <button class="link" data-act="how" aria-label="How options are scored">${ic('info', 16)}</button>`)}
     <div class="row"><span class="small muted">Ranked by ${state.params.objective === 'delivery' ? 'on-time delivery' : 'lowest expected cost'} · tap an option for details</span>
       <button class="pill" data-act="whatif">${ic('sliders', 16)} What if</button></div>
-    <div class="card"><table class="tbl opt"><thead><tr><th>Option</th><th>Action</th><th class="r">Cost<br>(₹ L)</th><th class="c">On-time<br>dispatch</th></tr></thead><tbody>${rows}</tbody></table></div>
-    <div class="card"><div class="card-h"><h2><span style="color:var(--blu)">${ic('shield', 20)}</span>Constraints (auto-checked)</h2><span class="tag b">Option ${best.id}</span></div>
+    <div class="card half"><table class="tbl opt"><thead><tr><th>Option</th><th>Action</th><th class="r">Cost<br>(₹ L)</th><th class="c">On-time<br>dispatch</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="card half"><div class="card-h"><h2><span style="color:var(--blu)">${ic('shield', 20)}</span>Constraints (auto-checked)</h2><span class="tag b">Option ${best.id}</span></div>
       <div class="card-b">${checkList(checksFor(best))}</div></div>
     ${nextBtn('plan', `View recommended plan · option ${best.id}`, `${lakh(best.exp)} expected, saves ${lakh(best.vsBase)}`)}`;
 }
@@ -528,7 +575,7 @@ function renderPlan() {
   return `
     ${header('Recommended Plan')}
     <div class="ai-row"><span class="ai-pill">${ic('spark', 15, 2)} Recommended by AI</span><span class="small muted">Risk before repair <b style="color:var(--t1)">${pct(o.pFail, o.pFail < 0.1 ? 1 : 0)}</b></span></div>
-    <div class="card">
+    <div class="half stack"><div class="card">
       <div class="hero"><span class="big">${o.id}</span><div><h2>${esc(o.short)}</h2><p>${esc(o.when)}${o.moved > 0.05 ? ` · ${hrs(o.moved)} of LH work to M-09` : ''}</p></div></div>
       <div class="stats">
         <div class="stat"><b>${lakh(o.exp)}</b><span>Expected cost</span></div>
@@ -536,9 +583,9 @@ function renderPlan() {
         <div class="stat"><b>${hrs(avoided)}</b><span>Breakdown time avoided</span></div>
       </div>
     </div>
-    <div class="card"><div class="card-h"><h2>Proposed timeline</h2></div><div class="card-b">${planLanes(o)}</div></div>
-    <div class="callout g"><span class="ci">${ic('check', 18, 2.6)}</span><div><h3>Expected outcome</h3><ul>${outcome.map(t => `<li>${t}</li>`).join('')}</ul></div></div>
-    ${actions}
+    <div class="callout g"><span class="ci">${ic('check', 18, 2.6)}</span><div><h3>Expected outcome</h3><ul>${outcome.map(t => `<li>${t}</li>`).join('')}</ul></div></div></div>
+    <div class="half stack"><div class="card"><div class="card-h"><h2>Proposed timeline</h2></div><div class="card-b">${planLanes(o)}</div></div>
+    ${actions}</div>
     ${!d ? `<button class="link" style="justify-self:center" data-act="tab" data-tab="options">Compare with other options</button>` : ''}`;
 }
 
@@ -601,15 +648,15 @@ function renderLearn() {
     `Signature library precision now ${good || planned ? '32/38' : '31/38'} (was 31/37).`,
   ].filter(Boolean);
   return `${header('Outcome & Learning')}${seg}
-    <div class="card"><div class="card-h"><h2>Actual vs expected</h2><div class="lg"><span><i style="background:#6aa0f0"></i>Expected</span><span><i style="background:var(--grn)"></i>Actual</span></div></div>
+    <div class="card half"><div class="card-h"><h2>Actual vs expected</h2><div class="lg"><span><i style="background:#6aa0f0"></i>Expected</span><span><i style="background:var(--grn)"></i>Actual</span></div></div>
       <div class="card-b"><div class="ave">
         ${aveRow('clock', 'Downtime on M-07 (hours)', eDown, aDown, eDown.toFixed(1), aDown.toFixed(1), Math.max(eDown, aDown, 1) * 1.15, false)}
         ${aveRow('truck', 'On-time delivery', o.onTime * 100, r.onTime ? 100 : 0, ot(o.onTime), r.onTime ? '100%' : 'Late', 100, true)}
         ${aveRow('rupee', 'Margin kept (₹ L)', eM * WEEK_CONTRIB / 1e5, aM * WEEK_CONTRIB / 1e5, lk(eM * WEEK_CONTRIB), lk(aM * WEEK_CONTRIB), WEEK_CONTRIB / 1e5, true)}
       </div></div></div>
-    <div class="callout ${good ? 'g' : 'r'}"><span class="ci">${ic(good ? 'check' : 'warn', 18, 2.6)}</span><div><h3>Decision outcome</h3>
+    <div class="half stack"><div class="callout ${good ? 'g' : 'r'}"><span class="ci">${ic(good ? 'check' : 'warn', 18, 2.6)}</span><div><h3>Decision outcome</h3>
       <p>${good ? `Option ${o.id} executed. Orders dispatched on time; the response cost ${lakh(r.actualCost)} against ${lakh(o.exp)} expected.` : `The breakdown the engine warned about happened. The week cost ${lakh(r.actualCost)}.`}</p></div></div>
-    <div class="callout r" style="background:#fff3f3"><span class="ci" style="background:#ef6b6b">${ic('bulb', 18, 2)}</span><div><h3>Key learnings</h3><ul>${learnings.map(t => `<li>${t}</li>`).join('')}</ul></div></div>
+    <div class="callout r" style="background:#fff3f3"><span class="ci" style="background:#ef6b6b">${ic('bulb', 18, 2)}</span><div><h3>Key learnings</h3><ul>${learnings.map(t => `<li>${t}</li>`).join('')}</ul></div></div></div>
     <div class="card"><div class="card-h"><h2>What happened</h2><span class="tag m">Simulated</span></div><div class="card-b">
       <ol class="tl">${r.tl.sort((a, b) => a.h - b.h).map(e => `<li><span class="w">${at(e.h)}</span><span class="d ${e.c}"></span><span>${e.t}</span></li>`).join('')}</ol></div></div>`;
 }
@@ -620,14 +667,14 @@ function renderLearn() {
 function renderMore() {
   const item = (href, icon, t, s, act) => `<${href ? `a href="${href}"${/^https:/.test(href) ? ' target="_blank" rel="noopener"' : ''}` : `button data-act="${act}"`} class="mi"><span class="mic">${ic(icon, 20)}</span><span><b>${t}</b><small>${s}</small></span><span class="chev">${ic('chev', 16)}</span></${href ? 'a' : 'button'}>`;
   return `${header('More')}
-    <div class="card"><div class="menu">
+    <div class="card half"><div class="menu">
       ${window.SINGLE_FILE ? item(DOWNLOAD_HTML, 'dl', 'Download this app (HTML file)', 'One file that opens in any browser, offline') : `${item('classic.html#ai', 'chat', 'Plant Saathi', 'Ask the AI analyst why, in English, Hindi or Marathi')}
       ${item('classic.html#live', 'pulse', 'Live machine', 'Run the engine on real sensor readings from a laptop')}
       ${item('classic.html', 'grid', 'Full analysis view', 'Every chart, table and assumption behind the plan')}`}
       ${item(null, 'sliders', 'What-if assumptions', 'Change today’s facts and watch the ranking move', 'whatif')}
       ${item(null, 'reset', 'Reset demo', 'Back to this morning, before any decision', 'reset')}
     </div></div>
-    <div class="callout b"><span class="ci">${ic('info', 18, 2)}</span><div><h3>About this app</h3>
+    <div class="callout b half"><span class="ci">${ic('info', 18, 2)}</span><div><h3>About this app</h3>
       <p>The plant, machines, orders, costs and sensor readings are simulated to show how the decision engine works. They are not results from a real factory.</p></div></div>
     <p class="note">Engine · Weibull k = 2 · 15-minute steps · 9 constraints</p>`;
 }
@@ -727,7 +774,7 @@ function alertsSheet() {
 const SCREENS = { home: renderHome, impact: renderImpact, options: renderOptions, plan: renderPlan, learn: renderLearn, more: renderMore };
 function renderNav() {
   const dot = { home: true, plan: !state.decision };
-  document.getElementById('nav').innerHTML = TABS.map(t => `<button data-act="tab" data-tab="${t.id}"${ui.tab === t.id ? ' aria-current="page"' : ''}>${ic(t.i, 23)}${dot[t.id] ? '<span class="dot"></span>' : ''}${t.t}</button>`).join('');
+  document.getElementById('nav').innerHTML = `<button class="brand" data-act="tab" data-tab="home" aria-label="Plant Ops Optimiser, home"><span class="logo">PO</span><span>Plant Ops Optimiser<small>${esc(PLANT)} · simulated data</small></span></button>` + TABS.map(t => `<button data-act="tab" data-tab="${t.id}"${ui.tab === t.id ? ' aria-current="page"' : ''}>${ic(t.i, 23)}${dot[t.id] ? '<span class="dot"></span>' : ''}${t.t}</button>`).join('');
 }
 function render() { document.getElementById('screen').innerHTML = SCREENS[ui.tab](); renderNav(); }
 function go(tab) { ui.tab = tab; if (!sheetEl.hidden) closeSheet(); render(); window.scrollTo(0, 0); try { history.replaceState(null, '', '#' + tab); } catch (e) { /* file:// */ } }

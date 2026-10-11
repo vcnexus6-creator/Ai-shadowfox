@@ -10,6 +10,12 @@ A model that is helpful in reducing machine cost.
 | --- | --- | --- | --- | --- |
 | ![Home](docs/screenshots/1-home.png) | ![Impact assessment](docs/screenshots/2-impact.png) | ![Response options](docs/screenshots/3-options.png) | ![Recommended plan](docs/screenshots/4-plan.png) | ![Outcome and learning](docs/screenshots/5-learn.png) |
 
+On a laptop or desktop the same page switches to a website layout: navigation across the top, two-column content and centred dialogs.
+
+| Website: Home | Website: Options |
+| --- | --- |
+| ![Home on a desktop](docs/screenshots/desktop-home.png) | ![Response options on a desktop](docs/screenshots/desktop-options.png) |
+
 ## Download
 
 | What | Link |
