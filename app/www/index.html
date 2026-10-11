@@ -259,8 +259,8 @@ input[type="range"] { width: 100%; accent-color: var(--blu); height: 28px; }
 .toast { position: fixed; z-index: 100; left: 50%; transform: translateX(-50%); bottom: calc(var(--nav-h) + 18px + env(safe-area-inset-bottom, 0px)); background: var(--t1); color: #fff; padding: 10px 16px; border-radius: 999px; font-size: 13.5px; box-shadow: 0 8px 24px rgba(15, 31, 61, .25); max-width: 90%; text-align: center; }
 .note { font-size: 12px; color: var(--t3); text-align: center; }
 .empty { text-align: center; padding: 26px 18px; display: grid; gap: 12px; justify-items: center; color: var(--t2); }
-/* ===== Website layout for wide screens (laptops, desktops, tablets in landscape) ===== */
 .nav .brand { display: none; }
+/* ===== Website layout for wide screens (laptops, desktops, tablets in landscape) ===== */
 @media (min-width: 900px) {
   html, body { background: var(--bg); }
   .app { max-width: none; box-shadow: none; display: flex; flex-direction: column; }
@@ -305,6 +305,7 @@ input[type="range"] { width: 100%; accent-color: var(--blu); height: 28px; }
   .grab { display: none; }
   .toast { bottom: 28px; }
 }
+/* ===== end website layout ===== */
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
@@ -356,7 +357,8 @@ const TABS = [
   { id: 'plan', t: 'Plan', i: 'plan' }, { id: 'learn', t: 'Learn', i: 'learn' }, { id: 'more', t: 'More', i: 'more' },
 ];
 const PLANT = 'Chakan Unit 2';
-const DOWNLOAD_HTML = 'https://github.com/vcnexus6-creator/Ai-shadowfox/releases/download/apk-latest/plant-ops-optimiser.html';
+const RELEASE = 'https://github.com/vcnexus6-creator/Ai-shadowfox/releases/download/apk-latest/';
+const DOWNLOAD_HTML = RELEASE + 'plant-ops-optimiser.html', WEBSITE_HTML = RELEASE + 'plant-ops-website.html';
 const lk = n => (n / 1e5).toFixed(2);                         // ₹ lakh without the symbol, for tables
 const ALERTS = () => MACHINES.filter(m => m.alert || m.watch);
 const avgOee = () => Math.round(MACHINES.reduce((t, m) => t + m.oee, 0) / MACHINES.length);
@@ -668,7 +670,7 @@ function renderMore() {
   const item = (href, icon, t, s, act) => `<${href ? `a href="${href}"${/^https:/.test(href) ? ' target="_blank" rel="noopener"' : ''}` : `button data-act="${act}"`} class="mi"><span class="mic">${ic(icon, 20)}</span><span><b>${t}</b><small>${s}</small></span><span class="chev">${ic('chev', 16)}</span></${href ? 'a' : 'button'}>`;
   return `${header('More')}
     <div class="card half"><div class="menu">
-      ${window.SINGLE_FILE ? item(DOWNLOAD_HTML, 'dl', 'Download this app (HTML file)', 'One file that opens in any browser, offline') : `${item('classic.html#ai', 'chat', 'Plant Saathi', 'Ask the AI analyst why, in English, Hindi or Marathi')}
+      ${window.SINGLE_FILE ? item(DOWNLOAD_HTML, 'dl', 'Download this app (HTML file)', 'One file that opens in any browser, offline') + item(WEBSITE_HTML, 'grid', 'Website version', 'The full analysis page for a laptop or desktop') : `${item('classic.html#ai', 'chat', 'Plant Saathi', 'Ask the AI analyst why, in English, Hindi or Marathi')}
       ${item('classic.html#live', 'pulse', 'Live machine', 'Run the engine on real sensor readings from a laptop')}
       ${item('classic.html', 'grid', 'Full analysis view', 'Every chart, table and assumption behind the plan')}`}
       ${item(null, 'sliders', 'What-if assumptions', 'Change today’s facts and watch the ranking move', 'whatif')}

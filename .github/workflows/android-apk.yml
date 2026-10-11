@@ -46,16 +46,16 @@ jobs:
       - name: Name the APK
         run: cp android/app/build/outputs/apk/debug/app-debug.apk plant-ops-optimiser.apk
 
-      - name: Build the single-file HTML app
+      - name: Build the downloadable HTML files (mobile app and website)
         working-directory: .
-        run: python3 tools/build_single_html.py app/plant-ops-optimiser.html
+        run: python3 tools/build_single_html.py app/html
 
       - uses: actions/upload-artifact@v4
         with:
           name: plant-ops-optimiser-apk
           path: |
             app/plant-ops-optimiser.apk
-            app/plant-ops-optimiser.html
+            app/html/*.html
 
       # On main, also publish the APK as a release so it can be downloaded straight to a phone
       - name: Publish release
@@ -66,8 +66,10 @@ jobs:
           name: Plant Ops Optimiser (latest)
           body: |
             - **plant-ops-optimiser.apk**: Android app. Download it on the phone and allow installs from your browser.
-            - **plant-ops-optimiser.html**: the same app as one HTML file. Download it and open it in any browser, on a phone or a computer.
+            - **plant-ops-optimiser.html**: the mobile app as one HTML file. Open it in a phone's browser.
+            - **plant-ops-website.html**: the full analysis website as one HTML file. Open it in a laptop or desktop browser.
           files: |
             app/plant-ops-optimiser.apk
-            app/plant-ops-optimiser.html
+            app/html/plant-ops-optimiser.html
+            app/html/plant-ops-website.html
           make_latest: true
