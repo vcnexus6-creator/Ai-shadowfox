@@ -1,9 +1,10 @@
-"""Build the two downloadable, self-contained HTML files.
+"""Build the downloadable, self-contained HTML files from the app page (app/www/index.html).
 
-  plant-ops-optimiser.html  the phone app (app/www/index.html + engine.js), phone layout only
-  plant-ops-website.html    the full analysis page (app/www/classic.html), for laptops and desktops
+  plant-ops-optimiser.html  for phones
+  plant-ops-website.html    for laptops and desktops
 
-Each opens straight from a phone or computer with no other files.
+Both are the same page: it switches to its phone layout (bottom tab bar) on narrow
+screens and uses the full width on wide ones. Each opens with no other files.
 Usage:  python tools/build_single_html.py [out_dir]     (default: dist/)
 """
 import base64
@@ -14,56 +15,38 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 WWW = ROOT / "app" / "www"
 OUT = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "dist"
-RELEASE = "https://github.com/vcnexus6-creator/Ai-shadowfox/releases/download/apk-latest/"
-ICON = "data:image/png;base64," + base64.b64encode((WWW / "icons" / "icon-192.png").read_bytes()).decode()
 
 
-def swap(html, old, new, name):
-    if html.count(old) != 1:
-        sys.exit(f"build_single_html: expected exactly one {old!r} in {name}")
-    return html.replace(old, new)
+def data_uri(name, mime):
+    return f"data:{mime};base64," + base64.b64encode((WWW / "icons" / name).read_bytes()).decode()
 
 
-OPERON = {
-    "icons/operon-mark.png": "data:image/png;base64," + base64.b64encode((WWW / "icons" / "operon-mark.png").read_bytes()).decode(),
-    "icons/operon-logo.webp": "data:image/webp;base64," + base64.b64encode((WWW / "icons" / "operon-logo.webp").read_bytes()).decode(),
+EMBED = {
+    "icons/operon-mark.png": data_uri("operon-mark.png", "image/png"),
+    "icons/operon-logo.webp": data_uri("operon-logo.webp", "image/webp"),
 }
+ICON = data_uri("icon-192.png", "image/png")
 
 
-def standalone(html, name):
-    """Drop links to files that will not sit next to a downloaded copy, and embed the Operon AI images."""
-    for path, uri in OPERON.items():
-        html = html.replace(path, uri)
-    html = swap(html, '<link rel="manifest" href="manifest.webmanifest">\n', "", name)
+def build():
+    html = (WWW / "index.html").read_text(encoding="utf-8")
+    # drop links to files that will not sit next to a downloaded copy, and embed the images
+    if html.count('<link rel="manifest" href="manifest.webmanifest">\n') != 1:
+        sys.exit("build_single_html: manifest link not found in index.html")
+    html = html.replace('<link rel="manifest" href="manifest.webmanifest">\n', "")
     html = re.sub(r'<link rel="icon"[^>]*>', f'<link rel="icon" type="image/png" href="{ICON}">', html, count=1)
     html = re.sub(r'<link rel="apple-touch-icon"[^>]*>', f'<link rel="apple-touch-icon" href="{ICON}">', html, count=1)
-    return html
-
-
-def build_mobile():
-    html = (WWW / "index.html").read_text(encoding="utf-8")
-    engine = (WWW / "engine.js").read_text(encoding="utf-8")
-    html = swap(html, '<script src="engine.js"></script>', f"<script>window.SINGLE_FILE = true;\n{engine}\n</script>", "index.html")
-    # phone layout only: cut the wide-screen website styles
-    start = html.index("/* ===== Website layout for wide screens")
-    end = html.index("/* ===== end website layout ===== */\n") + len("/* ===== end website layout ===== */\n")
-    html = html[:start] + html[end:]
-    return standalone(html, "index.html")
-
-
-def build_website():
-    html = (WWW / "classic.html").read_text(encoding="utf-8")
-    html = standalone(html, "classic.html")
-    html = swap(html, '<a class="hdr-mark" href="index.html" aria-label="Back to the app" title="Back to the app"',
-                f'<a class="hdr-mark" href="{RELEASE}plant-ops-optimiser.html" target="_blank" rel="noopener" aria-label="Mobile version" title="Mobile version"', "classic.html")
+    for path, uri in EMBED.items():
+        html = html.replace(path, uri)
     html = re.sub(r"\nif \('serviceWorker' in navigator[^\n]*\n[^\n]*\n\}\n", "\n", html, count=1)
-    if "serviceWorker" in html:
-        sys.exit("build_single_html: service worker registration still present in the website build")
+    if "serviceWorker" in html or "icons/" in html:
+        sys.exit("build_single_html: a reference to a sibling file is still present")
     return html
 
 
 OUT.mkdir(parents=True, exist_ok=True)
-for name, html in (("plant-ops-optimiser.html", build_mobile()), ("plant-ops-website.html", build_website())):
+page = build()
+for name in ("plant-ops-optimiser.html", "plant-ops-website.html"):
     path = OUT / name
-    path.write_text(html, encoding="utf-8")
+    path.write_text(page, encoding="utf-8")
     print(f"wrote {path} ({path.stat().st_size // 1024} KB)")
