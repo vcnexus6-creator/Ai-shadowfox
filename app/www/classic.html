@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Devanagari:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap">
 <style>
-/* Layout: a mobile-app style operations console in a light navy / sky-blue / yellow palette. Header with search and export, underline tabs for the five decision steps plus Plant Saathi, the voice-enabled AI analyst, a decision strip on every tab, then full-width panels: metric cards, chart cards and sortable tables. Sticky app bar on top; on phones the steps become a bottom tab bar. */
+/* Layout: a mobile-app style operations console in a light navy / sky-blue / yellow palette. Header with search and export, underline tabs for the five decision steps plus Operon AI, the voice-enabled AI analyst, a decision strip on every tab, then full-width panels: metric cards, chart cards and sortable tables. Sticky app bar on top; on phones the steps become a bottom tab bar. */
 :root {
   color-scheme: light;
   /* surfaces: soft off-white page, white cards, pale-blue panel headers (eye-friendly, no pure-white glare on the page) */
@@ -314,7 +314,14 @@ details.acc[open] > summary::after { content: "−"; }
 @media (max-width: 760px) { .drop { grid-template-columns: minmax(0, 1fr); } .drop-i { display: none; } }
 .empty { padding: 36px 18px; text-align: center; color: var(--t2); display: grid; gap: 12px; justify-items: center; }
 
-/* Plant Saathi (AI analyst) */
+/* Operon AI (AI analyst) */
+.op-mark { border-radius: 50%; object-fit: cover; }
+.ai-title .op-logo { height: 54px; width: auto; max-width: 100%; display: block; }
+.ai-title { flex-wrap: wrap; }
+@media (max-width: 760px) {
+  .ai-title .op-logo { height: 44px; }
+  .nb .ic.op-mark, .nb[aria-current="page"] .ic.op-mark { width: 24px; height: 24px; padding: 0; background: none; box-shadow: 0 0 0 2px var(--yel); }
+}
 .ai-wrap { background: var(--bg2); border: 1px solid var(--bd); border-radius: var(--r12); padding: 18px 20px; display: grid; gap: 12px; }
 .ai-title { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
 .ai-sub { font-size: 12px; color: var(--t3); margin-top: 3px; }
@@ -526,7 +533,7 @@ details.acc > summary { font: 700 12px var(--sans); color: var(--navy); padding:
 .drop { border: 2px dashed var(--bd2); box-shadow: none; }
 .drop-i { background: var(--yel-d); color: var(--navy); }
 
-/* Plant Saathi: chat-app look */
+/* Operon AI: chat-app look */
 .ai-title { font-size: 16px; color: var(--navy); }
 .ai-in { min-height: 46px; border-radius: 999px; padding: 10px 18px; font-size: 15px; background: var(--bg3); border-color: transparent; }
 .ai-in:focus { background: var(--bg2); border-color: var(--sky); }
@@ -1435,7 +1442,7 @@ function drivers() {
    ===================================================================== */
 const TABS = [
   { n: 1, id: 'detect', t: 'Detect' }, { n: 2, id: 'assess', t: 'Assess' }, { n: 3, id: 'optimise', t: 'Optimise' },
-  { n: 4, id: 'recommend', t: 'Recommend' }, { n: 5, id: 'learn', t: 'Learn' }, { n: 7, id: 'live', t: 'Live machine' }, { n: 6, id: 'ai', t: 'Plant Saathi' },
+  { n: 4, id: 'recommend', t: 'Recommend' }, { n: 5, id: 'learn', t: 'Learn' }, { n: 7, id: 'live', t: 'Live machine' }, { n: 6, id: 'ai', t: 'Operon AI' },
 ];
 function navCount(n) {
   const d = state.decision;
@@ -1456,8 +1463,8 @@ const ICONS = {
   7: '<rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 11h2l1.5-3 3 6 1.5-3h2"/>',
   6: '<path d="M4 5h16v11H9l-5 4V5z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/>',
 };
-const SHORT = { 7: 'Live', 6: 'Saathi' };
-function navIcon(n) { return `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]}</svg>`; }
+const SHORT = { 7: 'Live', 6: 'Operon' };
+function navIcon(n) { if (n === 6) return '<img class="ic op-mark" src="icons/operon-mark.png" alt="" aria-hidden="true">'; return `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]}</svg>`; }
 function navDot(n) { const m = navCount(n).match(/nb-cnt\s*(\w*)/); return `<span class="dot ${m && m[1] ? m[1] : 'none'}" aria-hidden="true"></span>`; }
 function renderNav() {
   const nav = $('#nav');
@@ -1882,7 +1889,7 @@ function renderRecommend() {
       <div class="cc">
         <div class="ct-row"><div><div class="ct">Decision log</div><div class="cc-t">Every step is recorded for review</div></div><span class="bdg b-mute">${state.log.length} EVENTS</span></div>
         <div class="tw"><table class="log-t"><thead><tr><th>Time (IST)</th><th>By</th><th>Event</th></tr></thead><tbody>${logRows()}</tbody></table></div>
-        <div class="next" style="justify-content:flex-start;margin-top:12px"><button class="btn" data-act="go" data-step="6">Ask Plant Saathi →</button></div>
+        <div class="next" style="justify-content:flex-start;margin-top:12px"><button class="btn" data-act="go" data-step="6">Ask Operon AI →</button></div>
       </div>
     </div>`;
 }
@@ -1980,11 +1987,11 @@ function renderLearn() {
         <div class="mc"><div class="mc-l">Downtime avoided</div><div class="mc-v">31 h</div><div class="mc-s">estimated against the model</div></div>
       </div>
     </div>
-    <div class="next"><button class="btn" data-act="go" data-step="6">Ask Plant Saathi →</button><button class="btn btn-pri" data-act="reset">↺ Run the demo again</button></div>`;
+    <div class="next"><button class="btn" data-act="go" data-step="6">Ask Operon AI →</button><button class="btn btn-pri" data-act="reset">↺ Run the demo again</button></div>`;
 }
 
 /* =====================================================================
-   RENDER: Plant Saathi (AI analyst)
+   RENDER: Operon AI (AI analyst)
    ===================================================================== */
 const QA = [
   { t: 'Why not wait for Sunday?', s: 'Risk curve vs Sunday maintenance', q: 'Why not just wait until Sunday maintenance to replace the bearing?' },
@@ -2000,9 +2007,9 @@ const QA = [
 function renderAI() {
   const rows = drivers();
   return `
-    ${pt('Plant Saathi · AI analyst', 'Ask why, by typing or speaking, in the plant’s own language', 'Saathi means companion. It reads only this page’s numbers and explains them, out loud if you like. It never recalculates them and cannot change the plan; the plant head decides.')}
+    ${pt('Operon AI · AI analyst', 'Ask why, by typing or speaking, in the plant’s own language', 'Operon AI reads only this page’s numbers and explains them, out loud if you like. It never recalculates them and cannot change the plan; the plant head decides.')}
     <div class="ai-wrap" id="ask-card">
-      <div class="ct-row" style="margin:0"><div><div class="ai-title">Plant Saathi <span class="bdg b-ai">CLAUDE</span><span class="bdg b-info">VOICE</span></div><div class="ai-sub">Grounded in this morning’s engine run · ${R.opts.length} responses · ${state.log.length} logged events</div></div><div class="flt"><span class="hint">Answer in</span>${langToggle()}</div></div>
+      <div class="ct-row" style="margin:0"><div><div class="ai-title"><img class="op-logo" src="icons/operon-logo.webp" alt="Operon AI: smarter decisions, uninterrupted production"><span class="bdg b-ai">CLAUDE</span><span class="bdg b-info">VOICE</span></div><div class="ai-sub">Grounded in this morning’s engine run · ${R.opts.length} responses · ${state.log.length} logged events</div></div><div class="flt"><span class="hint">Answer in</span>${langToggle()}</div></div>
       <div class="ai-row"><input class="ai-in" id="askq" type="text" maxlength="300" placeholder="Type or tap the mic and ask about the risk, the responses, the schedule or the cost…" aria-label="Your question"><button class="mic" id="micbtn" data-act="mic" aria-pressed="false" aria-label="Ask by voice" title="Ask by voice"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="1.5" width="5" height="8.5" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 7.5a5 5 0 0 0 10 0M8 12.5v2.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><button class="ai-go" id="askbtn" data-act="ask">Analyze →</button></div>
       <div class="voice-bar"><button class="switch" role="switch" id="speakbtn" aria-checked="${voice.speak}" data-act="speak"><span>Read answers aloud<small>in the answer language</small></span><span class="k"></span></button><span class="vstate" id="vstate" aria-live="polite"></span></div>
       <div class="ai-resp" id="answer" aria-live="polite" hidden></div>
@@ -2416,7 +2423,7 @@ async function ask() {
   if (!sample) { lockAsk('Asking Claude works when this page is opened in Claude.'); return; }
   stopSpeaking(); const spoken = voice.fromMic || voice.dictation; voice.fromMic = false; voice.dictation = false; if ($('#askq')) $('#askq').classList.remove('dictate');
   const lang = /marathi|मराठी/i.test(q) ? 'Marathi' : /hindi|हिन्दी|हिंदी/i.test(q) ? 'Hindi' : ({ en: 'English', hi: 'Hindi', mr: 'Marathi' })[state.lang];
-  const prompt = `You are "Plant Saathi", the explanation layer of a prototype called "AI Plant Operations Optimiser". A plant head is asking about this morning's recommendation.
+  const prompt = `You are "Operon AI", the explanation layer of a prototype called "AI Plant Operations Optimiser". A plant head is asking about this morning's recommendation.
 Rules:
 - Use only the facts and numbers in DATA. Do not invent numbers, machines, people, prices or results.
 - The numbers come from the engine. Explain them; never recalculate or change them.
@@ -2593,7 +2600,7 @@ function renderLive() {
       </tbody></table></div>
       <p class="hint" style="margin-top:10px">Run it on Windows: <span class="mono">py -m pip install psutil</span>, then <span class="mono">py laptop_collector.py</span>. On a Mac use <span class="mono">python3</span>.</p></div>`;
   if (!L) return `
-    ${pt('Live machine', 'Connect a real machine and run the engine on it', 'Load the sensor file from a laptop (or any machine with the collector) and the engine runs the same five steps on real readings. Plant Saathi then answers questions about it.', '<span class="bdg b-ok">REAL DATA</span>')}
+    ${pt('Live machine', 'Connect a real machine and run the engine on it', 'Load the sensor file from a laptop (or any machine with the collector) and the engine runs the same five steps on real readings. Operon AI then answers questions about it.', '<span class="bdg b-ok">REAL DATA</span>')}
     ${drop}<p class="hint" id="liveerr" role="alert"></p>${how}`;
   const { s, comp, risks, opts, reco, learn, apps } = L.an;
   const scoreCls = s.score >= 80 ? 'ok-t' : s.score >= 55 ? 'warn-t' : 'crit-t';
@@ -2642,7 +2649,7 @@ function renderLive() {
     <div class="cc"><div class="ct-row"><div class="ct">05 · Learn</div></div>
       <ul class="list">${learn.map(t => `<li><span class="mk-ok">↻</span><span>${esc(t)}</span></li>`).join('')}</ul></div>
     <div class="ai-wrap" id="live-card">
-      <div class="ct-row" style="margin:0"><div><div class="ai-title">Ask Plant Saathi about this machine <span class="bdg b-ai">CLAUDE</span></div><div class="ai-sub">Grounded in this file and the engine’s analysis above · it explains, it does not recalculate</div></div><div class="flt"><span class="hint">Answer in</span>${langToggle()}</div></div>
+      <div class="ct-row" style="margin:0"><div><div class="ai-title"><img class="op-mark" src="icons/operon-mark.png" alt="" width="28" height="28">Ask Operon AI about this machine <span class="bdg b-ai">CLAUDE</span></div><div class="ai-sub">Grounded in this file and the engine’s analysis above · it explains, it does not recalculate</div></div><div class="flt"><span class="hint">Answer in</span>${langToggle()}</div></div>
       <div class="ai-row"><input class="ai-in" id="liveq" type="text" maxlength="300" placeholder="e.g. Give me the full analysis · Is my laptop safe for a 2-hour presentation?" aria-label="Your question about this machine"><button class="mic" id="micbtn" data-act="mic" aria-pressed="false" aria-label="Ask by voice" title="Ask by voice"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="1.5" width="5" height="8.5" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 7.5a5 5 0 0 0 10 0M8 12.5v2.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><button class="ai-go" id="livebtn" data-act="live-ask">Analyze →</button></div>
       <div class="qg">${LIVE_QA.map((x, i) => `<button class="qb" data-act="live-sugg" data-i="${i}">${esc(x.t)}<span>${esc(x.s)}</span></button>`).join('')}</div>
       <div class="ai-resp" id="liveans" aria-live="polite" hidden></div>
@@ -2679,7 +2686,7 @@ async function liveAsk() {
   if (!sample) { note.textContent = 'Asking Claude works when this page is opened in Claude. The analysis above works without it.'; return; }
   stopSpeaking(); const spoken = voice.fromMic || voice.dictation; voice.fromMic = false; voice.dictation = false; qEl.classList.remove('dictate');
   const lang = /marathi|मराठी/i.test(q) ? 'Marathi' : /hindi|हिन्दी|हिंदी/i.test(q) ? 'Hindi' : LANG_NAME[state.lang];
-  const prompt = `You are "Plant Saathi", the explanation layer of a prototype called "AI Plant Operations Optimiser". The user connected a real machine (their laptop) through a sensor collector, and the engine has already analysed it.
+  const prompt = `You are "Operon AI", the explanation layer of a prototype called "AI Plant Operations Optimiser". The user connected a real machine (their laptop) through a sensor collector, and the engine has already analysed it.
 Rules:
 - Use only the facts and numbers in DATA. Do not invent readings, apps or results. If DATA lacks something, say so.
 - The engine computed the statuses and the recommendation. Explain them; do not change them or recalculate them.
