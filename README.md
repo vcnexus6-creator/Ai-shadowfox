@@ -21,11 +21,12 @@ On a laptop or desktop the same page switches to a website layout: navigation ac
 | What | Link |
 | --- | --- |
 | Android app (APK) | https://github.com/vcnexus6-creator/Ai-shadowfox/releases/download/apk-latest/plant-ops-optimiser.apk |
-| Single HTML file (any browser, phone or computer) | https://github.com/vcnexus6-creator/Ai-shadowfox/releases/download/apk-latest/plant-ops-optimiser.html |
+| Mobile app as one HTML file (phone browser) | https://github.com/vcnexus6-creator/Ai-shadowfox/releases/download/apk-latest/plant-ops-optimiser.html |
+| Website as one HTML file (laptop or desktop browser) | https://github.com/vcnexus6-creator/Ai-shadowfox/releases/download/apk-latest/plant-ops-website.html |
 
 Both are rebuilt on every merge to `main`. While the repository is private, these links ask for a GitHub sign-in with access to the repo; once it is public, anyone with the link can download.
 
-To build the HTML file yourself: `python3 tools/build_single_html.py` (writes `dist/plant-ops-optimiser.html`).
+To build the HTML files yourself: `python3 tools/build_single_html.py` (writes `dist/plant-ops-optimiser.html` and `dist/plant-ops-website.html`).
 
 ## Install on a phone
 
