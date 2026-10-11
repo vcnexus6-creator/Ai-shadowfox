@@ -285,7 +285,7 @@ const P_ = {
   bell: '<path d="M6 9a6 6 0 1 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9"/><path d="M10 20a2 2 0 0 0 4 0"/>',
   chev: '<path d="M9 6l6 6-6 6"/>', down: '<path d="M6 9l6 6 6-6"/>', cal: '<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/>',
   check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>', warn: '<path d="M12 4 2.8 20h18.4L12 4z"/><path d="M12 10v4.5"/><circle cx="12" cy="17.3" r=".5"/>',
-  x: '<path d="M6 6l12 12M18 6 6 18"/>', info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="8" r=".5"/>',
+  x: '<path d="M6 6l12 12M18 6 6 18"/>', dl: '<path d="M12 4v11M7.5 10.5 12 15l4.5-4.5"/><path d="M5 19h14"/>', info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="8" r=".5"/>',
   thermo: '<path d="M10 14V5a2 2 0 1 1 4 0v9a4 4 0 1 1-4 0z"/>', clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
   truck: '<path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>',
   rupee: '<path d="M7 5h10M7 9h10M7 5c5 0 6 8 0 8l7 7"/>', bulb: '<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>',
@@ -309,6 +309,7 @@ const TABS = [
   { id: 'plan', t: 'Plan', i: 'plan' }, { id: 'learn', t: 'Learn', i: 'learn' }, { id: 'more', t: 'More', i: 'more' },
 ];
 const PLANT = 'Chakan Unit 2';
+const DOWNLOAD_HTML = 'https://github.com/vcnexus6-creator/Ai-shadowfox/releases/download/apk-latest/plant-ops-optimiser.html';
 const lk = n => (n / 1e5).toFixed(2);                         // ₹ lakh without the symbol, for tables
 const ALERTS = () => MACHINES.filter(m => m.alert || m.watch);
 const avgOee = () => Math.round(MACHINES.reduce((t, m) => t + m.oee, 0) / MACHINES.length);
@@ -617,12 +618,12 @@ function renderLearn() {
    6 · MORE
    ===================================================================== */
 function renderMore() {
-  const item = (href, icon, t, s, act) => `<${href ? `a href="${href}"` : `button data-act="${act}"`} class="mi"><span class="mic">${ic(icon, 20)}</span><span><b>${t}</b><small>${s}</small></span><span class="chev">${ic('chev', 16)}</span></${href ? 'a' : 'button'}>`;
+  const item = (href, icon, t, s, act) => `<${href ? `a href="${href}"${/^https:/.test(href) ? ' target="_blank" rel="noopener"' : ''}` : `button data-act="${act}"`} class="mi"><span class="mic">${ic(icon, 20)}</span><span><b>${t}</b><small>${s}</small></span><span class="chev">${ic('chev', 16)}</span></${href ? 'a' : 'button'}>`;
   return `${header('More')}
     <div class="card"><div class="menu">
-      ${item('classic.html#ai', 'chat', 'Plant Saathi', 'Ask the AI analyst why, in English, Hindi or Marathi')}
+      ${window.SINGLE_FILE ? item(DOWNLOAD_HTML, 'dl', 'Download this app (HTML file)', 'One file that opens in any browser, offline') : `${item('classic.html#ai', 'chat', 'Plant Saathi', 'Ask the AI analyst why, in English, Hindi or Marathi')}
       ${item('classic.html#live', 'pulse', 'Live machine', 'Run the engine on real sensor readings from a laptop')}
-      ${item('classic.html', 'grid', 'Full analysis view', 'Every chart, table and assumption behind the plan')}
+      ${item('classic.html', 'grid', 'Full analysis view', 'Every chart, table and assumption behind the plan')}`}
       ${item(null, 'sliders', 'What-if assumptions', 'Change today’s facts and watch the ranking move', 'whatif')}
       ${item(null, 'reset', 'Reset demo', 'Back to this morning, before any decision', 'reset')}
     </div></div>
@@ -775,7 +776,7 @@ const start = (location.hash || '').slice(1);
 if (SCREENS[start]) ui.tab = start;
 render();
 
-if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost') && !window.Capacitor) {
+if (!window.SINGLE_FILE && 'serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost') && !window.Capacitor) {
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 }
 </script>
