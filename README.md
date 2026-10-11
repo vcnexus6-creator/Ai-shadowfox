@@ -10,6 +10,17 @@ A model that is helpful in reducing machine cost.
 | --- | --- | --- | --- | --- |
 | ![Home](docs/screenshots/1-home.png) | ![Impact assessment](docs/screenshots/2-impact.png) | ![Response options](docs/screenshots/3-options.png) | ![Recommended plan](docs/screenshots/4-plan.png) | ![Outcome and learning](docs/screenshots/5-learn.png) |
 
+## Download
+
+| What | Link |
+| --- | --- |
+| Android app (APK) | https://github.com/vcnexus6-creator/Ai-shadowfox/releases/download/apk-latest/plant-ops-optimiser.apk |
+| Single HTML file (any browser, phone or computer) | https://github.com/vcnexus6-creator/Ai-shadowfox/releases/download/apk-latest/plant-ops-optimiser.html |
+
+Both are rebuilt on every merge to `main`. While the repository is private, these links ask for a GitHub sign-in with access to the repo; once it is public, anyone with the link can download.
+
+To build the HTML file yourself: `python3 tools/build_single_html.py` (writes `dist/plant-ops-optimiser.html`).
+
 ## Install on a phone
 
 ### Android (APK)

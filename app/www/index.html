@@ -620,9 +620,9 @@ function renderMore() {
   const item = (href, icon, t, s, act) => `<${href ? `a href="${href}"` : `button data-act="${act}"`} class="mi"><span class="mic">${ic(icon, 20)}</span><span><b>${t}</b><small>${s}</small></span><span class="chev">${ic('chev', 16)}</span></${href ? 'a' : 'button'}>`;
   return `${header('More')}
     <div class="card"><div class="menu">
-      ${item('classic.html#ai', 'chat', 'Plant Saathi', 'Ask the AI analyst why, in English, Hindi or Marathi')}
+      ${window.SINGLE_FILE ? '' : `${item('classic.html#ai', 'chat', 'Plant Saathi', 'Ask the AI analyst why, in English, Hindi or Marathi')}
       ${item('classic.html#live', 'pulse', 'Live machine', 'Run the engine on real sensor readings from a laptop')}
-      ${item('classic.html', 'grid', 'Full analysis view', 'Every chart, table and assumption behind the plan')}
+      ${item('classic.html', 'grid', 'Full analysis view', 'Every chart, table and assumption behind the plan')}`}
       ${item(null, 'sliders', 'What-if assumptions', 'Change today’s facts and watch the ranking move', 'whatif')}
       ${item(null, 'reset', 'Reset demo', 'Back to this morning, before any decision', 'reset')}
     </div></div>
@@ -775,7 +775,7 @@ const start = (location.hash || '').slice(1);
 if (SCREENS[start]) ui.tab = start;
 render();
 
-if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost') && !window.Capacitor) {
+if (!window.SINGLE_FILE && 'serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost') && !window.Capacitor) {
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 }
 </script>
