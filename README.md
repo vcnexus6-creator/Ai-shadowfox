@@ -49,7 +49,7 @@ The web app works offline once it has been opened.
 | Path | What it is |
 | --- | --- |
 | `app/www/index.html` | The phone app: Home, Impact, Options, Plan, Learn, More |
-| `app/www/classic.html` | Full analysis view, with Plant Saathi and Live machine (opened from More) |
+| `app/www/classic.html` | Full analysis view, with Operon AI and Live machine (opened from More) |
 | `app/www/engine.js` | Simulated plant data and the decision engine used by the phone app |
 | `app/www/` (other) | Manifest, service worker, icons |
 | `app/android/` | Capacitor Android project that wraps `app/www` |
@@ -70,4 +70,4 @@ npm run android:icons    # regenerate icons/splash from app/assets/
 ## Notes
 
 - All plant, machine, order and cost data is simulated.
-- Plant Saathi's AI answers need the page to be opened inside Claude. In the APK or web app, Plant Saathi switches itself off and shows a note; everything else works.
+- Operon AI's answers need the page to be opened inside Claude. In the APK or web app, Operon AI switches itself off and shows a note; everything else works.

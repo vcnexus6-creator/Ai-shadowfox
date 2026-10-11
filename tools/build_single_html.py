@@ -24,8 +24,16 @@ def swap(html, old, new, name):
     return html.replace(old, new)
 
 
+OPERON = {
+    "icons/operon-mark.png": "data:image/png;base64," + base64.b64encode((WWW / "icons" / "operon-mark.png").read_bytes()).decode(),
+    "icons/operon-logo.webp": "data:image/webp;base64," + base64.b64encode((WWW / "icons" / "operon-logo.webp").read_bytes()).decode(),
+}
+
+
 def standalone(html, name):
-    """Drop links to files that will not sit next to a downloaded copy."""
+    """Drop links to files that will not sit next to a downloaded copy, and embed the Operon AI images."""
+    for path, uri in OPERON.items():
+        html = html.replace(path, uri)
     html = swap(html, '<link rel="manifest" href="manifest.webmanifest">\n', "", name)
     html = re.sub(r'<link rel="icon"[^>]*>', f'<link rel="icon" type="image/png" href="{ICON}">', html, count=1)
     html = re.sub(r'<link rel="apple-touch-icon"[^>]*>', f'<link rel="apple-touch-icon" href="{ICON}">', html, count=1)
