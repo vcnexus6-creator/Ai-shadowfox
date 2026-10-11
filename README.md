@@ -6,23 +6,25 @@ A model that is helpful in reducing machine cost.
 
 ## Screenshots
 
-| Home | Impact | Options | Plan | Learn |
+On a phone (and in the Android app):
+
+| Detect | Assess | Optimise | Recommend | Operon AI |
 | --- | --- | --- | --- | --- |
-| ![Home](docs/screenshots/1-home.png) | ![Impact assessment](docs/screenshots/2-impact.png) | ![Response options](docs/screenshots/3-options.png) | ![Recommended plan](docs/screenshots/4-plan.png) | ![Outcome and learning](docs/screenshots/5-learn.png) |
+| ![Detect](docs/screenshots/phone-1-detect.png) | ![Assess](docs/screenshots/phone-2-assess.png) | ![Optimise](docs/screenshots/phone-3-optimise.png) | ![Recommend](docs/screenshots/phone-4-recommend.png) | ![Operon AI](docs/screenshots/phone-5-operon-ai.png) |
 
-On a laptop or desktop the same page switches to a website layout: navigation across the top, two-column content and centred dialogs.
+On a laptop or desktop the same page uses the full screen width:
 
-| Website: Home | Website: Options |
+| Detect | Optimise |
 | --- | --- |
-| ![Home on a desktop](docs/screenshots/desktop-home.png) | ![Response options on a desktop](docs/screenshots/desktop-options.png) |
+| ![Detect on a desktop](docs/screenshots/desktop-detect.png) | ![Optimise on a desktop](docs/screenshots/desktop-optimise.png) |
 
 ## Download
 
 | What | Link |
 | --- | --- |
 | Android app (APK) | https://github.com/vcnexus6-creator/Ai-shadowfox/releases/download/apk-latest/plant-ops-optimiser.apk |
-| Mobile app as one HTML file (phone browser) | https://github.com/vcnexus6-creator/Ai-shadowfox/releases/download/apk-latest/plant-ops-optimiser.html |
-| Website as one HTML file (laptop or desktop browser) | https://github.com/vcnexus6-creator/Ai-shadowfox/releases/download/apk-latest/plant-ops-website.html |
+| App as one HTML file, for phones | https://github.com/vcnexus6-creator/Ai-shadowfox/releases/download/apk-latest/plant-ops-optimiser.html |
+| Same page, for laptops and desktops | https://github.com/vcnexus6-creator/Ai-shadowfox/releases/download/apk-latest/plant-ops-website.html |
 
 Both are rebuilt on every merge to `main`. While the repository is private, these links ask for a GitHub sign-in with access to the repo; once it is public, anyone with the link can download.
 
@@ -48,9 +50,8 @@ The web app works offline once it has been opened.
 
 | Path | What it is |
 | --- | --- |
-| `app/www/index.html` | The phone app: Home, Impact, Options, Plan, Learn, More |
-| `app/www/classic.html` | Full analysis view, with Operon AI and Live machine (opened from More) |
-| `app/www/engine.js` | Simulated plant data and the decision engine used by the phone app |
+| `app/www/index.html` | The app: Detect, Assess, Optimise, Recommend, Learn, Live machine and Operon AI; phone layout on narrow screens, full width on wide ones |
+| `app/www/app-v2.html`, `app/www/engine.js` | An alternative native-style app design (Home, Impact, Options, Plan, Learn); kept but not used by the builds |
 | `app/www/` (other) | Manifest, service worker, icons |
 | `app/android/` | Capacitor Android project that wraps `app/www` |
 | `app/assets/` | Source images for the Android icon and splash screen |

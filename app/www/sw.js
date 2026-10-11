@@ -1,7 +1,7 @@
 // Offline support for the installed web app: the app shell is cached on install,
 // Google Fonts are cached the first time they load.
-const CACHE = 'plant-ops-v2';
-const SHELL = ['./', 'index.html', 'engine.js', 'classic.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
+const CACHE = 'plant-ops-v3';
+const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icons/operon-mark.png', 'icons/operon-logo.webp', 'icons/icon-192.png', 'icons/icon-512.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
